@@ -1,5 +1,6 @@
 import simplegui
 import random
+print "Adam and David Blackjack has loaded"
 CARD_SIZE = (73, 98)
 CARD_CENTER = (36.5, 49)
 card_images = simplegui.load_image("http://commondatastorage.googleapis.com/codeskulptor-assets/cards.jfitz.png")
