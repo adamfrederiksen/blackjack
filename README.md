@@ -1,2 +1,2 @@
 # blackjack
--Simple codeskulptor game
+Simple codeskulptor game
