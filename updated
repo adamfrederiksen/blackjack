@@ -58,8 +58,7 @@ class Card:
     def get_rank(self):
         return self.rank
     def draw(self, canvas, pos):
-        card_loc = (CARD_CENTER[0] + CARD_SIZE[0] * RANKS.index(self.rank), 
-                    CARD_CENTER[1] + CARD_SIZE[1] * SUITS.index(self.suit))
+        card_loc = (CARD_CENTER[0] + CARD_SIZE[0] * RANKS.index(self.rank), CARD_CENTER[1] + CARD_SIZE[1] * SUITS.index(self.suit))
         canvas.draw_image(card_images, card_loc, CARD_SIZE, [pos[0] + CARD_CENTER[0], pos[1] + CARD_CENTER[1]], CARD_SIZE)
 class Hand:
     def __init__(self):
