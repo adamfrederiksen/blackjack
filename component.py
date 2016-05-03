@@ -9,18 +9,22 @@ CARD_BACK_CENTER = (35.5, 48)
 card_back = simplegui.load_image("http://commondatastorage.googleapis.com/codeskulptor-assets/card_back.png")    
 in_play = False
 outcome = ""
+j = 100
 score = 0
 SUITS = ('C', 'S', 'H', 'D')
 RANKS = ('A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K')
 VALUES = {'A':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, 'T':10, 'J':10, 'Q':10, 'K':10}
-timer_interval = 1000 # In milliseconds (1000 ms = 1 s)
+background_timer_interval = 900
+text_timer_interval = 900# In milliseconds (1000 ms = 1 s)
 Color_Rainbow = ["Red","Orange","Yellow","Green","Blue","Indigo","Violet"]
 Current_Color_Background = ""
-Color_Counter_Background_Background = 0
+Color_Counter_Background_Background = 2
+Current_Color_Text = ""
+Color_Counter_Text = 0
 Rainbow_Toggle = True
 Rainbow_Button_Label = "Toggle Rainbow Effect"
 frame = simplegui.create_frame("Blackjack", 600, 600)
-def timer_handler():
+def background_timer_handler():
     global Color_Counter_Background_Background;
     global Current_Color_Background;
     global Counter_Background;
@@ -32,9 +36,25 @@ def timer_handler():
             Color_Counter_Background_Background = 0
     Current_Color_Background = Color_Rainbow[Color_Counter_Background_Background]
     frame.set_canvas_background(Current_Color_Background)
-timer = simplegui.create_timer(timer_interval, timer_handler)
+timer = simplegui.create_timer(background_timer_interval, background_timer_handler)
 timer.start()
-timer_handler()
+background_timer_handler()
+def time_text_handler():
+    global Color_Counter_Text;
+    global Current_Color_Text;
+    global Counter_Background;
+    global Color_Rainbow;
+    global Current_Color_Text
+    global Color_Counter_Text
+    if Rainbow_Toggle == True:
+        if Color_Counter_Text < 6:
+            Color_Counter_Text = Color_Counter_Text + 1
+        else:
+            Color_Counter_Text= 0
+    Current_Color_Text = Color_Rainbow[Color_Counter_Text]
+texttimer = simplegui.create_timer(text_timer_interval, time_text_handler)
+texttimer.start()
+time_text_handler()
 def Rainbow_Toggler():
     global Rainbow_Toggle, Rainbow_Button_Label;
     if Rainbow_Toggle == True:
@@ -57,8 +77,8 @@ class Card:
     def get_rank(self):
         return self.rank
     def draw(self, canvas, pos):
-        card_loc = (CARD_CENTER[0] + CARD_SIZE[0] * RANKS.index(self.rank), CARD_CENTER[1] + CARD_SIZE[1] * SUITS.index(self.suit))
-        canvas.draw_image(card_images, card_loc, CARD_SIZE, [pos[0] + CARD_CENTER[0], pos[1] + CARD_CENTER[1]], CARD_SIZE)
+        card_pos = (CARD_CENTER[0] + CARD_SIZE[0] * RANKS.index(self.rank), CARD_CENTER[1] + CARD_SIZE[1] * SUITS.index(self.suit))
+        canvas.draw_image(card_images, card_pos, CARD_SIZE, [pos[0] + CARD_CENTER[0], pos[1] + CARD_CENTER[1]], CARD_SIZE)
 class Hand:
     def __init__(self):
         self.hand = []
@@ -83,8 +103,8 @@ class Hand:
         pass
     def draw(self, canvas, p):
         for z in self.hand:
-            card_loc = (CARD_CENTER[0] + CARD_SIZE[0] * RANKS.index(z.rank), CARD_CENTER[1] + CARD_SIZE[1] * SUITS.index(z.suit))
-            canvas.draw_image(card_images, card_loc, CARD_SIZE, [p[0] + CARD_CENTER[0] + 73 * self.hand.index(z), p[1] + CARD_CENTER[1]], CARD_SIZE)
+            card_pos = (CARD_CENTER[0] + CARD_SIZE[0] * RANKS.index(z.rank), CARD_CENTER[1] + CARD_SIZE[1] * SUITS.index(z.suit))
+            canvas.draw_image(card_images, card_pos, CARD_SIZE, [p[0] + CARD_CENTER[0] + 73 * self.hand.index(z), p[1] + CARD_CENTER[1]], CARD_SIZE)
 class Deck:
     def __init__(self):
         self.deck = []
@@ -147,10 +167,10 @@ def draw(canvas):
     dealer_hand.draw(canvas, [0, 100])    
     player_hand.draw(canvas, [0, 300])
     if in_play:
-        canvas.draw_image(card_back, CARD_BACK_CENTER, CARD_BACK_SIZE, [0 + CARD_BACK_CENTER[0], 100 + CARD_BACK_CENTER[1]], CARD_SIZE)    
-    canvas.draw_text("Score: "+str(score),[50,50],20,"Black")
-    canvas.draw_text("BlackJack",[250,50],35,"Black")
-    canvas.draw_text(outcome,[50,75],20,"Black")
+        canvas.draw_image(card_back, CARD_BACK_CENTER, CARD_BACK_SIZE, [CARD_BACK_CENTER[0], j + CARD_BACK_CENTER[1]], CARD_SIZE)    
+    canvas.draw_text("Score: "+str(score),[50,50],20,Current_Color_Text)
+    canvas.draw_text("BlackJack",[250,50],35,Current_Color_Text)
+    canvas.draw_text(outcome,[50,75],20,Current_Color_Text)
 print(Current_Color_Background)
 frame.set_canvas_background(Current_Color_Background)
 frame.add_button("Deal", deal, 200)
