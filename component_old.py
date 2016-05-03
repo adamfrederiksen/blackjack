@@ -38,10 +38,8 @@ def Rainbow_Toggler():
     global Rainbow_Toggle, Rainbow_Button_Label;
     if Rainbow_Toggle == True:
         Rainbow_Toggle = False
-        #Sound_Button_Label = "Enable Sound"
     elif Rainbow_Toggle == False:
         Rainbow_Toggle = True
-        #Sound_Button_Label = "Disable Sound"
 class Card:
     def __init__(self, suit, rank):
         if (suit in SUITS) and (rank in RANKS):
@@ -51,7 +49,6 @@ class Card:
             self.suit = None
             self.rank = None
             print "Invalid card: ", suit, rank
-
     def __str__(self):
         return self.suit + self.rank
     def get_suit(self):
@@ -64,13 +61,11 @@ class Card:
 class Hand:
     def __init__(self):
         self.hand = []
-
     def __str__(self):
         handstr = ''
         for x in self.hand:
             handstr = handstr + str(x)
         return handstr
-
     def add_card(self, card):
         self.hand.append(card)
     def get_value(self):
