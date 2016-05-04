@@ -100,7 +100,14 @@ class Hand:
             handvalue += 10
         return handvalue
     def busted(self):
-        pass
+        global score,outcome,in_play
+        if self.get_value() > 21:
+            outcome = "You have busted. New deal?"
+            
+            in_play = False
+            return True
+        else:
+            outcome = "Hit or stand?" 
     def draw(self, canvas, p):
         for z in self.hand:
             card_pos = (CARD_CENTER[0] + CARD_SIZE[0] * RANKS.index(z.rank), CARD_CENTER[1] + CARD_SIZE[1] * SUITS.index(z.suit))
@@ -128,24 +135,22 @@ def deal():
     dealer_hand.add_card(my_deck.deal_card())
     dealer_hand.add_card(my_deck.deal_card())
     outcome = 'Hit or stand?'
+    if in_play:
+        score-=1
     in_play = True
 def hit():
     global outcome, score, in_play
-    player_hand.add_card(my_deck.deal_card())
-    if player_hand.get_value() > 21:
-        outcome = "You have busted. New deal?"
-        score -= 1
-        in_play = False
-        return score, outcome, in_play
-    else:
-        outcome = "Hit or stand?"  
+    
+    if not player_hand.busted():
+        player_hand.add_card(my_deck.deal_card())
+        if player_hand.busted():
+            score-=1
+    return score, outcome, in_play    
 def stand():
     global outcome, score, in_play
     in_play = False
-    if player_hand.get_value() > 21:
-        outcome = "You have busted. New deal?"
-        score -= 1
-    else:
+    #dealer_hand.busted()
+    if player_hand.get_value() < 21:
         while dealer_hand.get_value() < 17:
             dealer_hand.add_card(my_deck.deal_card())
         else:
